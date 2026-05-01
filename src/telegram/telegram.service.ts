@@ -202,7 +202,7 @@ export class TelegramService {
       await this.sendMessage(chatId, 'Информация пока не добавлена.');
       return;
     }
-    const buttons = items.map((item) => [{ text: item.title, callback_data: `info_detail:${item.id}` }]);
+    const buttons = items.map((item: any) => [{ text: item.title, callback_data: `info_detail:${item.id}` }]);
     buttons.push([{ text: '⬅️ Назад', callback_data: 'main_menu' }]);
     await this.sendMessage(chatId, '📋 *Общая информация и рекомендации*\n\nВыберите раздел:', {
       parse_mode: 'Markdown',
@@ -232,7 +232,7 @@ export class TelegramService {
 
   private async showAllowedCategories(chatId: number): Promise<void> {
     const products = await this.prisma.allowed_product.findMany();
-    const categories = [...new Set(products.map((p) => p.category))];
+    const categories = [...new Set(products.map((p: any) => p.category))];
     const buttons = categories.map((cat) => [{ text: `✅ ${cat}`, callback_data: `allowed_cat:${cat}` }]);
     buttons.push([{ text: '⬅️ Назад', callback_data: 'main_menu' }]);
     await this.sendMessage(chatId, '✅ *Разрешённые продукты*\n\nВыберите категорию:', {
@@ -244,7 +244,7 @@ export class TelegramService {
   private async showAllowedByCategory(chatId: number, category: string): Promise<void> {
     const products = await this.prisma.allowed_product.findMany({ where: { category } });
     let text = `✅ *${category}*\n\n`;
-    products.forEach((p) => {
+    products.forEach((p: any) => {
       text += `• *${p.name}* — ${p.description || ''}\n`;
     });
     await this.sendMessage(chatId, text, {
@@ -262,7 +262,7 @@ export class TelegramService {
 
   private async showForbiddenCategories(chatId: number): Promise<void> {
     const products = await this.prisma.forbidden_product.findMany();
-    const categories = [...new Set(products.map((p) => p.category))];
+    const categories = [...new Set(products.map((p: any) => p.category))];
     const buttons = categories.map((cat) => [{ text: `❌ ${cat}`, callback_data: `forbidden_cat:${cat}` }]);
     buttons.push([{ text: '⬅️ Назад', callback_data: 'main_menu' }]);
     await this.sendMessage(chatId, '❌ *Запрещённые продукты и добавки*\n\nВыберите категорию:', {
@@ -274,7 +274,7 @@ export class TelegramService {
   private async showForbiddenByCategory(chatId: number, category: string): Promise<void> {
     const products = await this.prisma.forbidden_product.findMany({ where: { category } });
     let text = `❌ *${category}*\n\n`;
-    products.forEach((p) => {
+    products.forEach((p: any) => {
       text += `• *${p.name}*\n  ${p.description || ''}\n  ⚠️ _${p.reason || ''}_\n\n`;
     });
     await this.sendMessage(chatId, text, {
@@ -292,7 +292,7 @@ export class TelegramService {
 
   private async showChecklistCategories(chatId: number): Promise<void> {
     const items = await this.prisma.shopping_checklist.findMany();
-    const categories = [...new Set(items.map((i) => i.category))];
+    const categories = [...new Set(items.map((i: any) => i.category))];
     const buttons = categories.map((cat) => [{ text: `🛒 ${cat}`, callback_data: `checklist_cat:${cat}` }]);
     buttons.push([{ text: '⬅️ Назад', callback_data: 'main_menu' }]);
     await this.sendMessage(chatId, '🛒 *Чеклист для покупок*\n\nВыберите категорию:', {
@@ -307,7 +307,7 @@ export class TelegramService {
       orderBy: { order: 'asc' },
     });
     let text = `🛒 *${category}*\n\n`;
-    items.forEach((item) => {
+    items.forEach((item: any) => {
       text += `☐ *${item.item}*\n`;
       if (item.tips) text += `  💡 _${item.tips}_\n`;
       text += '\n';
@@ -394,7 +394,7 @@ export class TelegramService {
     }
 
     let text = '📝 *Одобренные безопасные продукты:*\n\n';
-    posts.forEach((p, i) => {
+    posts.forEach((p: any, i: number) => {
       text += `${offset + i + 1}. *${p.productName}*\n`;
       text += `   ${p.description || ''}\n`;
       text += `   👤 @${p.username || 'аноним'}\n\n`;
