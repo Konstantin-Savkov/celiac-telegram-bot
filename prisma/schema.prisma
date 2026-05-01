@@ -1,0 +1,82 @@
+generator client {
+    provider = "prisma-client-js"
+    binaryTargets = ["native", "linux-musl-arm64-openssl-3.0.x"]
+    output = "/home/ubuntu/celiac_telegram_bot/nodejs_space/node_modules/.prisma/client"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+model user {
+  id         Int      @id @default(autoincrement())
+  telegramId BigInt   @unique @map("telegram_id")
+  username   String?  @default("")
+  isAdmin    Boolean  @default(false) @map("is_admin")
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  @@map("users")
+}
+
+model general_info {
+  id      Int    @id @default(autoincrement())
+  title   String
+  content String
+  order   Int    @default(0)
+
+  @@map("general_info")
+}
+
+model allowed_product {
+  id          Int     @id @default(autoincrement())
+  name        String
+  category    String
+  description String? @default("")
+
+  @@map("allowed_products")
+}
+
+model forbidden_product {
+  id          Int     @id @default(autoincrement())
+  name        String
+  category    String
+  description String? @default("")
+  reason      String? @default("")
+
+  @@map("forbidden_products")
+}
+
+model shopping_checklist {
+  id       Int     @id @default(autoincrement())
+  item     String
+  category String
+  tips     String? @default("")
+  order    Int     @default(0)
+
+  @@map("shopping_checklist")
+}
+
+model safe_product_post {
+  id          Int       @id @default(autoincrement())
+  userId      BigInt    @map("user_id")
+  username    String?   @default("")
+  productName String    @map("product_name")
+  description String?   @default("")
+  status      String    @default("pending")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  moderatedAt DateTime? @map("moderated_at")
+  moderatorId BigInt?   @map("moderator_id")
+
+  @@map("safe_product_posts")
+}
+
+model chat_message {
+  id        Int      @id @default(autoincrement())
+  userId    BigInt   @map("user_id")
+  username  String?  @default("")
+  message   String
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("chat_messages")
+}
